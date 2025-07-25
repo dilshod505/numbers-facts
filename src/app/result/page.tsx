@@ -1,16 +1,15 @@
-import { Button, Card, Typography } from "antd";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
-const { Title, Paragraph, Text } = Typography;
-
-type SearchParams = {
+// API dan fact olish funksiyasi
+async function getNumberFact({
+  type,
+  number,
+  random,
+}: {
   type?: string;
   number?: string;
   random?: string;
-};
-
-async function getNumberFact({ type, number, random }: SearchParams) {
+}) {
   if (!type) return null;
 
   const url =
@@ -27,26 +26,26 @@ async function getNumberFact({ type, number, random }: SearchParams) {
   }
 }
 
-type PageProps = {
-  searchParams: SearchParams;
-};
+// Asosiy sahifa komponenti
+export default async function ResultPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  // Parametrlarni tozalab olish
+  const type =
+    typeof searchParams.type === "string" ? searchParams.type : undefined;
+  const number =
+    typeof searchParams.number === "string" ? searchParams.number : undefined;
+  const random =
+    typeof searchParams.random === "string" ? searchParams.random : undefined;
 
-export default async function ResultPage({ searchParams }: PageProps) {
-  const { type, number, random } = searchParams;
   const fact = await getNumberFact({ type, number, random });
 
   if (!fact) return notFound();
 
   return (
-    <main
-      style={{
-        maxWidth: 500,
-        margin: "50px auto",
-        padding: 24,
-        border: "1px solid #ccc",
-        borderRadius: 8,
-      }}
-    >
+    <main className="max-w-xl mx-auto mt-10 p-4 border rounded">
       <h1 className="text-2xl font-bold mb-4">Результат</h1>
       <p>
         <strong>Тип:</strong> {type}
@@ -57,11 +56,6 @@ export default async function ResultPage({ searchParams }: PageProps) {
       <p className="mt-4">
         <strong>Факт:</strong> {fact}
       </p>
-      <Link href="/">
-        <Button type="primary" className="mt-3">
-          Вернуться назад
-        </Button>
-      </Link>
     </main>
   );
 }
