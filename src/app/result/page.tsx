@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 
-// API dan fact olish funksiyasi
 async function getNumberFact({
   type,
   number,
@@ -26,13 +25,13 @@ async function getNumberFact({
   }
 }
 
-// Asosiy sahifa komponenti
-export default async function ResultPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  // Parametrlarni tozalab olish
+type Props = {
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+};
+
+export default async function ResultPage({ searchParams }: Props) {
   const type =
     typeof searchParams.type === "string" ? searchParams.type : undefined;
   const number =
