@@ -1,21 +1,8 @@
 import { notFound } from "next/navigation";
 
-async function getNumberFact({
-  type,
-  number,
-  random,
-}: {
-  type?: string;
-  number?: string;
-  random?: string;
-}) {
-  if (!type) return null;
-
-  const url =
-    random === "true"
-      ? `http://numbersapi.com/random/${type}`
-      : `http://numbersapi.com/${number}/${type}`;
-
+// API dan fact olish funksiyasi
+async function getNumberFact() {
+  const url = `http://numbersapi.com/random/trivia`; // Misol uchun doimiy URL
   try {
     const res = await fetch(url);
     const text = await res.text();
@@ -25,36 +12,17 @@ async function getNumberFact({
   }
 }
 
-type Props = {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-};
-
-export default async function ResultPage({ searchParams }: Props) {
-  const type =
-    typeof searchParams.type === "string" ? searchParams.type : undefined;
-  const number =
-    typeof searchParams.number === "string" ? searchParams.number : undefined;
-  const random =
-    typeof searchParams.random === "string" ? searchParams.random : undefined;
-
-  const fact = await getNumberFact({ type, number, random });
+// Sahifa komponenti (searchParams yo'q)
+export default async function ResultPage() {
+  const fact = await getNumberFact();
 
   if (!fact) return notFound();
 
   return (
     <main className="max-w-xl mx-auto mt-10 p-4 border rounded">
       <h1 className="text-2xl font-bold mb-4">Результат</h1>
-      <p>
-        <strong>Тип:</strong> {type}
-      </p>
-      <p>
-        <strong>Число:</strong> {random === "true" ? "Случайное" : number}
-      </p>
-      <p className="mt-4">
-        <strong>Факт:</strong> {fact}
-      </p>
+
+      <p className="mt-4 d">Факт: {fact}</p>
     </main>
   );
 }
