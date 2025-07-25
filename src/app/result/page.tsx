@@ -1,6 +1,8 @@
-import { Button, Card } from "antd";
+import { Button, Card, Typography } from "antd";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+const { Title, Paragraph, Text } = Typography;
 
 type SearchParams = {
   type?: string;
@@ -25,11 +27,11 @@ async function getNumberFact({ type, number, random }: SearchParams) {
   }
 }
 
-export default async function ResultPage({
-  searchParams,
-}: {
+type PageProps = {
   searchParams: SearchParams;
-}) {
+};
+
+export default async function ResultPage({ searchParams }: PageProps) {
   const { type, number, random } = searchParams;
   const fact = await getNumberFact({ type, number, random });
 
